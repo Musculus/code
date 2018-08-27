@@ -1,0 +1,87 @@
+package PackageMaven;
+
+import java.sql.*;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Test2 {
+
+	public static void main(String[] args) throws SQLException, IOException {
+	System.out.println("init");
+    try {
+        try (Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null)){
+            System.out.println("connected");
+        }
+    } catch (Exception e){
+        e.printStackTrace();
+
+}
+Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null);
+Statement st = con.createStatement();
+
+//on récupérera dedans les ID tailles et couleurs
+int idColor=0, idTaille=0; 
+
+
+
+ResultSet Conn, ColorSet, TailleSet, StockSet;
+Conn = st.executeQuery("USE textile");
+
+//couleur = bleu, taille = M
+
+Scanner keyboard = new Scanner(System.in);
+System.out.println("écrire la couleur");
+String idblue = keyboard.nextLine();
+	
+PreparedStatement ps; 
+
+ps = con.prepareStatement("SELECT * FROM T_COULEUR WHERE LIBELLE=?");
+
+ps.setString(1,idblue);
+
+ColorSet = ps.executeQuery();
+
+//si l'on a trouvé la couleur correspondante
+if(ColorSet.next()){
+idColor=ColorSet.getInt("ID_COULEUR");
+}
+//si idTaille et idColor étaient des strings on aurait dû rajouter +"" après getInt("ID_COULEUR"
+
+//même procédé pour la taille
+
+ps = con.prepareStatement("SELECT * FROM T_TAILLE WHERE TAILLE=?");
+
+System.out.println("écrire la taille");
+String idM = keyboard.nextLine();
+
+ps.setString(1,idM);
+
+
+TailleSet = ps.executeQuery();
+
+if(TailleSet.next()){
+idTaille=TailleSet.getInt("ID_TAILLE");
+}
+
+//on récupère l'ensemble des stocks pour la couleur et la taille qui correspondent et trié par ordre croissant de stock
+
+ps = con.prepareStatement("SELECT * FROM T_STOCK WHERE ID_COULEUR=? AND ID_TAILLE=? AND QUANTITE_STOCK<? ORDER BY QUANTITE_STOCK ASC");
+
+ps.setInt(1,idColor);
+ps.setInt(2,idTaille);
+ps.setInt(3,10);
+
+StockSet = ps.executeQuery();
+
+//on affiche maintenant les informations voulues 
+//tant que l'on a du stock (une entité	)
+while (StockSet.next()){
+
+System.out.println("identifiant="+ StockSet.getString("ID_ARTICLE"));
+System.out.println("identifiant couleur="+ StockSet.getString("ID_COULEUR"));
+System.out.println("identifiant taille="+ idTaille);
+System.out.println("stock="+ StockSet.getInt("QUANTITE_STOCK"));
+System.out.println("****");
+}
+}
+}

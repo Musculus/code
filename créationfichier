@@ -1,0 +1,16 @@
+package PackageMaven;
+import java.io.PrintWriter;
+import java.io.File;
+import java.io.IOException;
+
+
+public class Test3 {
+	public static void main(String[] args) throws IOException {
+
+	    File file2 = new File ("C:/Users/Manu/Desktop/java/output2.txt");
+	    PrintWriter printWriter = new PrintWriter(file2);
+	    printWriter.println ("hello");
+	    printWriter.close ();       
+	  }
+
+}

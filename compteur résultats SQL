@@ -1,0 +1,35 @@
+package PackageMaven;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.io.PrintWriter;
+import java.io.File;
+import java.io.IOException;
+
+public class Test {
+    public static void main(String[] args) throws SQLException, IOException {
+        System.out.println("init");
+        try {
+            try (Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null)){
+                System.out.println("connected");
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+		
+Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null);
+Statement st = con.createStatement();		
+
+ResultSet Conn, Compteset;
+Conn = st.executeQuery("USE permistest");
+Compteset = st.executeQuery("select count(client_cours.cours_oid) from client_cours inner join cours on client_cours.cours_oid = cours.cours_oid where cours_pic = 2 and client_oid = 1");
+
+while (Compteset.next()){
+System.out.println("L'élève a effectué "+Compteset.getInt(1)+" cours.");
+// compte les cours de conduite pour un client_oid donné. il faudra prendre ce résultat et déterminer s'il est supérieur ou égal à 20 pour pouvoir faire passer le candidat
+
+}
+}
+}

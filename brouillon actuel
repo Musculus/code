@@ -1,0 +1,32 @@
+Fonctions à avoir :
+- Sélectionner les id_client avant reçu des cours de conduite
+- Compter le nombre de fois que l'id_client est répétée
+- Garder les id_client >= 20 répétitions dans un resultset pour ensuite pouvoir les mettre dans un fichier
+
+DISTINCT
+	SELECT Client_OID 
+	FROM client_cours 
+	INNER JOIN cours ON client_cours.cours_oid = cours.cours_oid
+	WHERE cours_pic = 2
+	HAVING COUNT(client_cours.client_oid)>3;
+	
+	SELECT Client_OID 
+	FROM client_cours 
+	INNER JOIN cours ON client_cours.cours_oid = cours.cours_oid
+	WHERE cours_pic = 2
+	HAVING COUNT(*)>3;
+HAVING COUNT(est_ok)>0;
+	
+	SELECT DISTINCT Client_OID
+	FROM ((client_cours 
+	INNER JOIN cours ON client_cours.cours_oid = cours.cours_oid)
+	INNER JOIN resultat ON client_cours.resultat_oid = resultat.resultat_oid)
+	WHERE cours_pic = 2
+	HAVING COUNT(est_ok)=1;
+
+SELECT COUNT(client_cours.cours_oid) 
+FROM client_cours 
+INNER JOIN cours ON client_cours.cours_oid = cours.cours_oid where cours_pic = 2 and client_oid = 1
+
+
+for

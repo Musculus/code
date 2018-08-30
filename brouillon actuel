@@ -23,6 +23,12 @@ HAVING COUNT(est_ok)>0;
 	INNER JOIN resultat ON client_cours.resultat_oid = resultat.resultat_oid)
 	WHERE cours_pic = 2
 	HAVING COUNT(est_ok)=1;
+	
+	SELECT DISTINCT LastName 
+	FROM employees
+	INNER JOIN Orders ON employees.EmployeeID = Orders.EmployeeID
+	WHERE ShipperID = 3
+	HAVING COUNT(OrderID)>10;
 
 SELECT COUNT(client_cours.cours_oid) 
 FROM client_cours 

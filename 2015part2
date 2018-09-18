@@ -4,7 +4,7 @@ import java.sql.*;
 import java.io.IOException;
 import java.util.Date;
 
-public class Test3 {
+public class Test {
 
 	public static void main(String[] args) throws SQLException, IOException {
 	System.out.println("init");
@@ -18,22 +18,12 @@ public class Test3 {
 }
 Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null);
 
-int idArticle = 0;
-ResultSet articlesSet, achatSet, Conn; 
+ResultSet achatSet, Conn; 
 Statement st = con.createStatement();
 
-PreparedStatement ps;
 Conn = st.executeQuery("USE textile");
-articlesSet = st.executeQuery("select * from T_ARTICLE");
 
-if(articlesSet.next()){
-	
-	idArticle = articlesSet.getInt("ID_ARTICLE");
-	//on sélectionne le dernier achat
-	ps = con.prepareStatement("select * from T_ACHAT WHERE ID_ARTICLE=? ORDER BY DATE desc limit 1");
-	ps.setInt(1, idArticle);
-	achatSet = ps.executeQuery();
-	
+achatSet= st.executeQuery("select * from T_ACHAT ORDER BY DATE desc limit 1");
 		if (achatSet.next()){
 		// on récupère les valeurs des dates
 		Date datearticle = achatSet.getDate("DATE");
@@ -41,9 +31,9 @@ if(articlesSet.next()){
 		long diff = ajd.getTime() - datearticle.getTime(); 
 		
 			if (diff>30){
-				System.out.println("identifiant de l'article ="+articlesSet.getString("ID_ARTICLE") + " achat le plus récent =" + datearticle);
+				System.out.println("identifiant de l'article ="+achatSet.getInt("ID_ARTICLE") + " achat le plus récent =" + datearticle);
 				}
 			}
-		}
+		
 	}
 }

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.sql.*;
 
 public class Test {
-
     public static void main(String[] args) throws Exception {
     	System.out.println("init");
         try {
@@ -22,24 +21,19 @@ public class Test {
         } catch (Exception e){
             e.printStackTrace();
         }
-        String date = JJMMAAAA(LocalDate.now());
-        
+        String date = aujourdhui(LocalDate.now());
         ArrayList<String> result = new ArrayList<>();
-        
         try {
         //OUVERTURE DU FICHIER
             FileReader fr = new FileReader(new File("C:/Users/Manu/Desktop/fichier csv code/examen_code_" + date + ".csv"));
             BufferedReader br = new BufferedReader(fr);
-            
             // LECTURE DES LIGNES DU FICHIER
             // ENREGISTREMENT DES LIGNES DANS UNE COLLECTION ARRAYLIST
             for(String line = br.readLine(); line != null; line = br.readLine())
                 result.add(line);
-            
             // FERMETURE DU FICHIER EN LECTURE
             br.close();
             fr.close();
-            
             // POUR CHAQUE LIGNE EN EVITANT L'ENTÊTE
             // RECUPÉRER LES DONNEES
             for(int i = 1; i < result.size(); i++){
@@ -48,61 +42,39 @@ public class Test {
                 if(champs.length != 3){
                     throw new Exception("Erreur fichier : il y a "+champs.length +" colonne(s).");
                 }
-                
-                
                 String NEPH = champs[0];
                 int RESULTAT = Integer.parseInt(champs[1]);
-                
 				// CREATION DES REQUETES SQL
                 String requeteSQL_CLIENT = "UPDATE CLIENT SET ETAT_PIC=" + RESULTAT +
                                            " WHERE NEPH = " + NEPH;
-                
-                
                 Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null);
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("USE TEST");                
                 ResultSet rs2 = st.executeQuery(requeteSQL_CLIENT);  
-                
                 while (rs2.next()) {
-                    System.out.print(rs.getString(1) + " "); //Print one element of a row
-
-
-                System.out.println();//Move to the next line to print the next row.           
-             
+                    System.out.print(rs.getString(1) + " "); 
+                System.out.println();
                   }
-             
-             
-                
-                
                 // CONNEXION A LA BASE DE DONNEE
-                // EXECUTION DE LA REQUETE SQL POUR METTRE A JOUR LA BASE DE DONNEE
-                
+                // EXECUTION DE LA REQUETE SQL POUR METTRE A JOUR LA BASE DE DONNEES
                 System.out.println(ligne);
             }
-            
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        
-        
     }
-    
-    private static String JJMMAAAA(LocalDate d){
-    
+    private static String aujourdhui(LocalDate d){
         StringBuilder sb = new StringBuilder();
         String JJ, MM;
-        JJ = "0" + d.getDayOfMonth();
-        MM = "0" + d.getMonthValue();
+        JJ = "" + d.getDayOfMonth();
+        MM = "" + d.getMonthValue();
         JJ = JJ.substring(JJ.length() - 2);
         MM = MM.substring(JJ.length() - 2);
         sb.append(JJ);
         sb.append(MM);
         sb.append(d.getYear());
-        return sb.toString();
-        
-    }
-    
+        return sb.toString();        
+    }   
 }
-

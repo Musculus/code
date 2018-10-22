@@ -1,6 +1,9 @@
 package PackageMaven;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.io.PrintWriter;
 import java.io.File;
 import java.io.IOException;
@@ -18,20 +21,28 @@ public class Test {
 		
 Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null);
 Statement st = con.createStatement();		
+File file2 = new File ("C:/Users/Manu/Desktop/java/2output.csv");
+PrintWriter printWriter = new PrintWriter(file2);
 
-Resultset Conn, Compteset;
+ResultSet Conn, Compteset;
 Conn = st.executeQuery("USE permistest");
-Compteset = st.executeQuery("select count(client_cours.cours_oid) from client_cours inner join cours on client_cours.cours_oid = cours.cours_oid where cours_pic = 2 and client_oid = 1");
 
-system.out.println("L'élève a effectué "+Compteset.getInt " cours.")
-// compte les cours de conduite pour un client_oid donné. il faudra prendre ce résultat et déterminer s'il est supérieur ou égal à 20 pour pouvoir faire passer le candidat
+Compteset = st.executeQuery("SELECT *, COUNT(EST_OK), COUNT(client_cours.cours_oid)"+ 
+"FROM (((client_cours "+
+"INNER JOIN cours ON client_cours.cours_oid = cours.cours_oid)"+
+"INNER JOIN resultat ON client_cours.resultat_oid = resultat.resultat_oid)"+
+"INNER JOIN client ON client_cours.client_oid = client.client_oid)"+
+"WHERE cours_pic = 2 GROUP BY client_cours.client_oid HAVING COUNT(client_cours.cours_oid)>3 AND COUNT(est_ok)>0");	
+
+while(Compteset.next()){
+	printWriter.println ("NEPH,NOM,PRENOM,DATE_NAISSANCE");
+	printWriter.println (Compteset.getLong("NEPH")+","+Compteset.getString("NOM")+","+Compteset.getString("PRENOM")+","+Compteset.getDate("DATE_NAISSANCE"));
+	    printWriter.close ();    
+		}
+	
+// cette requête détecte les élèves ayant au minimum 4 heures de cours et ayant un avis favorable de l'examinateur
+
 
 		
-		
-File file2 = new File ("C:/Users/Manu/Desktop/java/output2.txt");
-	    PrintWriter printWriter = new PrintWriter(file2);
-	    printWriter.println ("hello");
-	    printWriter.close ();   
-
 }
 }

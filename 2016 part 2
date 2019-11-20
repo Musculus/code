@@ -1,0 +1,33 @@
+package PackageMaven;
+
+import java.sql.*;
+import java.io.IOException;
+
+public class Test {
+
+	public static void main(String[] args) throws SQLException, IOException {
+	System.out.println("init");
+    try {
+        try (Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null)){
+            System.out.println("connected");
+		}
+	} catch (Exception e){
+        e.printStackTrace();
+}		
+
+Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null);
+
+ResultSet Conn, prestaset, countset;
+Statement st = con.createStatement();
+Conn = st.executeQuery("USE immo");
+prestaset = st.executeQuery("SELECT distinct T_PRESTATAIRE.ID_PRESTATAIRE, NOM FROM 
+T_PRESTATAIRE INNER JOIN T_INTERVENTION ON T_PRESTATAIRE.ID_PRESTATAIRE = T_INTERVENTION.ID_PRESTATAIRE");
+while(prestaset.next()){
+	int idprest = prestaset.getInt("ID_PRESTATAIRE");
+	countset = st.executeQuery("SELECT COUNT(ID_INTERVENTION) AS COUNT FROM T_INTERVENTION WHERE ID_PRESTATAIRE ="+idprest);
+	if(countset.next()){
+		System.out.println("Le prestataire "+prestaset.getString("NOM")+" a effectué "+countset.getInt("COUNT")+" interventions.");
+		}
+	}	
+}
+}

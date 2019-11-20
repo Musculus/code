@@ -1,0 +1,34 @@
+package PackageMaven;
+
+import java.sql.*;
+import java.io.IOException;
+
+public class Test {
+
+	public static void main(String[] args) throws SQLException, IOException {
+	System.out.println("init");
+    try {
+        try (Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null)){
+            System.out.println("connected");
+        }
+    } catch (Exception e){
+        e.printStackTrace();
+
+}
+Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null);
+
+ResultSet impayeset, Conn; 
+Statement st = con.createStatement();
+Conn = st.executeQuery("USE immo");
+
+impayeset = st.executeQuery("SELECT NOM, MAX(paiement) FROM ((T_LOCATAIRE INNER JOIN T_CONTRAT ON T_LOCATAIRE.ID_LOCATAIRE = T_CONTRAT.ID_LOCATAIRE) 
+INNER JOIN T_PAIEMENT ON T_CONTRAT.ID_CONTRAT = T_PAIEMENT.ID_CONTRAT) GROUP BY NOM ORDER BY PAIEMENT ASC");
+
+while(impayeset.next()){
+boolean nomimpaye = impayeset.getBoolean("MAX(paiement)") ;
+if (nomimpaye){
+} else { System.out.println("Client n'ayant jamais payé :"+impayeset.getString("NOM"));
+	}
+	} 
+	}
+}

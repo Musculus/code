@@ -1,17 +1,34 @@
 package PackageMaven;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.*; 
+import java.io.*;
+import java.lang.*; 
 import java.sql.*;
 
 public class Test{
+
+
+static class Infojoueur {
+public String nomjoueur;
+int nbrspect;
+//constructor
+public Infojoueur (String nomjoueur, int nbrspect){
+this.nomjoueur = nomjoueur;
+this.nbrspect = nbrspect;
+}
+public String toString() 
+    { 
+        return this.nbrspect + " " + this.nomjoueur; 
+    } 
+}
+
+static class sortbyspctr implements Comparator<Infojoueur> {
+public int compare(Infojoueur a, Infojoueur b) 
+    { 
+        return a.nbrspect - b.nbrspect; 
+    } 
+}
+
 public static void main(String[]args) throws Exception{
 System.out.println("init");
         try {
@@ -23,34 +40,35 @@ System.out.println("init");
         }
 		
 Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null);
-ResultSet Conn, listeset, compteurset;
+ResultSet Conn, listejset, compteurset;
 Statement st = con.createStatement();
 Conn = st.executeQuery("USE esport");
-File file1 = new File(emplacement du fichier);
-Printwriter pw = new Printwriter(file1);
-listejset = st.executeQuery("SElECT * FROM joueur");
 
-List<ArrayList<String>> listefinale = new ArrayList<ArrayList<String>>();
+listejset = st.executeQuery("SELECT * FROM joueur");
+ArrayList<Infojoueur> listefinale = new ArrayList<Infojoueur>();
+while(listejset.next()){
+String nomjoueur = listejset.getString("pseudoJoueur");
+compteurset = st.executeQuery("SELECT COUNT(DISTINCT idSpectateur) AS COUNT FROM ((statistique "+
+"INNER JOIN ResultatPartie ON statistique.idpartie = ResultatPartie.idpartie)"+
+"INNER JOIN joueur ON joueur.idjoueur = ResultatPartie.idjoueur)"+
+"WHERE pseudoJoueur ='"+nomjoueur+"'");
 
-while listeset.next(){
-string nomjoueur = listejset.getString("pseudoJoueur"));
+while(compteurset.next()){
+int nbrspect = compteurset.getInt("COUNT");
 
-compteurset = st.executeQuery("SELECT COUNT(DISTINCT idSpectateur) AS cptspecta FROM ((statistique 
-	INNER JOIN ResultatPartie ON statistique.idpartie = ResultatPartie.idpartie)
-	INNER JOIN joueur ON joueur.idjoueur = ResultatPartie.idjoueur
-	)
-WHERE pseudojoueur = nomjoueur;
 
-while compteurset.next(){
 
-for (int i = 0; i < listefinale.size(); i++){
-ArrayList<String>  = new ArrayList<String>();
-
-}
-
+listefinale.add(new Infojoueur (nomjoueur, nbrspect));
 }
 }
-
-
+System.out.println("Unsorted"); 
+        for (int i=0; i<listefinale.size(); i++) 
+            System.out.println(listefinale.get(i)); 
+  
+        Collections.sort(listefinale, new sortbyspctr()); 
+  
+        System.out.println("\nSorted by rollno"); 
+        for (int i=0; i<listefinale.size(); i++) 
+            System.out.println(listefinale.get(i));  // à rajouter : la création de fichier, la limite à 10 joueurs
 }
 }

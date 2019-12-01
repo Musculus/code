@@ -65,8 +65,7 @@ System.out.println("Unsorted");
         for (int i=0; i<listefinale.size(); i++) 
             System.out.println(listefinale.get(i)); 
   
-        Collections.sort(listefinale, new sortbyspctr()); 
-  
+        Collections.sort(listefinale, new sortbyspctr());  
         System.out.println("\nSorted by rollno"); 
         for (int i=0; i<listefinale.size(); i++) 
             System.out.println(listefinale.get(i));  // à rajouter : la création de fichier, la limite à 10 joueurs

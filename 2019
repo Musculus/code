@@ -18,14 +18,14 @@ this.nbrspect = nbrspect;
 }
 public String toString() // sans ça donne "PackageMaven.Test$Infojoueur@2077d4de" etc au lieu de "7 albacore" etc
     { 
-        return this.nbrspect + " " + this.nomjoueur; 
+        return this.nbrspect + " " + this.nomjoueur; // décrit en fait la structure de ce qui sera println
     } 
 }
 
 static class sortbyspctr implements Comparator<Infojoueur> {
-public int compare(Infojoueur a, Infojoueur b) 
+public int compare(Infojoueur a, Infojoueur b) // a et b ici peuvent être remplacés par n'importe quoi
     { 
-        return a.nbrspect - b.nbrspect; 
+        return a.nbrspect - b.nbrspect; // le a et b doivent nécessairement être le n'importe quoi de la ligne précédente
     } 
 }
 

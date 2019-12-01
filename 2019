@@ -14,11 +14,11 @@ int nbrspect;
 //constructor
 public Infojoueur (String nomjoueur, int nbrspect){
 this.nomjoueur = nomjoueur;
-this.nbrspect = nbrspect;
+this.nbrspect = nbrspect; // sans ça donne "0 null" dans le print
 }
 public String toString() // sans ça donne "PackageMaven.Test$Infojoueur@2077d4de" etc au lieu de "7 albacore" etc
     { 
-        return this.nbrspect + " " + this.nomjoueur; // décrit en fait la structure de ce qui sera println
+        return this.nbrspect + " " + this.nomjoueur; // décrit en fait la structure de ce qui sera print
     } 
 }
 

@@ -1,0 +1,42 @@
+package PackageMaven;
+
+import java.sql.*;
+import java.io.IOException;
+import java.util.Date;
+
+public class Test{
+
+	public static void main(String[] args) throws SQLException, IOException {
+	System.out.println("init");
+    try {
+        try (Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null)){
+            System.out.println("connected");
+        }
+    } catch (Exception e){
+        e.printStackTrace();
+
+}
+Connection con = DriverManager.getConnection("jdbc:mariadb://localhost/", "root", null);
+
+
+ResultSet achatSet, Conn; 
+Statement st = con.createStatement();
+
+Conn = st.executeQuery("USE textile");
+
+achatSet = st.executeQuery("SELECT DISTINCT ID_ARTICLE, DATE FROM T_ACHAT ORDER BY DATE DESC");
+
+
+	
+		while (achatSet.next()){
+		// on récupère les valeurs des dates
+		Date datearticle = achatSet.getDate("DATE");
+		Date ajd = new Date();
+		long diff = ajd.getTime() - datearticle.getTime(); 
+		
+			if (diff>30){
+				System.out.println("identifiant de l'article ="+achatSet.getInt("ID_ARTICLE") + " achat le plus récent =" + datearticle);
+				}
+			}
+		}
+	}

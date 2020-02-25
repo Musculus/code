@@ -55,9 +55,6 @@ compteurset = st.executeQuery("SELECT COUNT(DISTINCT idSpectateur) AS COUNT FROM
 
 while(compteurset.next()){
 int nbrspect = compteurset.getInt("COUNT");
-
-
-
 listefinale.add(new Infojoueur (nomjoueur, nbrspect));
 }
 }
